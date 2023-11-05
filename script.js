@@ -12,7 +12,11 @@ const gameboard = (() => {
         }
     }
 
-    // Style board array for console output
-    const gameboardOutput = board.map((row) => row.join(" ")).join("\n");
-    console.log(gameboardOutput);
+    const printBoard = () => {
+        // Style board array for console output
+        const gameboardOutput = board.map((row) => row.join(" ")).join("\n");
+        console.log(gameboardOutput);
+    };
+
+    return { printBoard };
 })();
