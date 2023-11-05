@@ -1,20 +1,18 @@
 // Create gameboard using module pattern
 const gameboard = (() => {
-    const gameboardArray = [];
+    const board = [];
     const rows = 3;
     const columns = 3;
 
-    // Initialize gameboard array
+    // Initialize board array
     for (let i = 0; i < rows; i++) {
-        gameboardArray.push([]);
+        board.push([]);
         for (let j = 0; j < columns; j++) {
-            gameboardArray[i].push("_");
+            board[i].push("_");
         }
     }
 
-    // Style gameboard array for console output
-    const gameboardOutput = gameboardArray
-        .map((row) => row.join(" "))
-        .join("\n");
+    // Style board array for console output
+    const gameboardOutput = board.map((row) => row.join(" ")).join("\n");
     console.log(gameboardOutput);
 })();
