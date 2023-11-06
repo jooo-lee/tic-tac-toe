@@ -20,6 +20,29 @@ const gameboard = (() => {
         console.log(gameboardOutput);
     };
 
+    const checkValidSquare = (row, column) => {
+        // User has pressed cancel or submitted without value
+        if (row === null || column === null || row === "" || column === "") {
+            return false;
+        }
+
+        // Value submitted is not a number
+        if (isNaN(row) || isNaN(column)) {
+            return false;
+        }
+
+        // Row and/or column picked is out of bounds
+        if (row < 0 || row >= rows || column < 0 || column >= columns) {
+            return false;
+        }
+
+        // Square has already been chosen before
+        if (board[row][column] != "_") return false;
+
+        // Square is valid
+        return true;
+    };
+
     const chooseSquare = (marker, row, column) => {
         board[row][column] = marker;
         moveCount++;
@@ -79,7 +102,7 @@ const gameboard = (() => {
         return false;
     };
 
-    return { displayBoard, chooseSquare, checkGameOver };
+    return { displayBoard, checkValidSquare, chooseSquare, checkGameOver };
 })();
 
 function createPlayer(name, marker) {
@@ -113,6 +136,11 @@ const gameController = (() => {
                 getActivePlayer().marker
             }), enter a column (0-2):`
         );
+
+        if (!gameboard.checkValidSquare(chosenRow, chosenColumn)) {
+            console.log(`${getActivePlayer().name}, invalid square!`);
+            return;
+        }
 
         gameboard.chooseSquare(
             getActivePlayer().marker,
