@@ -35,23 +35,46 @@ const gameController = (() => {
     const p1 = createPlayer("playerOne", "X");
     const p2 = createPlayer("playerTwo", "O");
 
-    const takeTurn = (player) => {
+    const players = [p1, p2];
+
+    let activePlayer = players[0];
+
+    const getActivePlayer = () => activePlayer;
+
+    const switchTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    const takeTurn = () => {
         const chosenRow = prompt(
-            `${player.name} - (${player.marker}), enter a row (0-2):`
-        );
-        const chosenColumn = prompt(
-            `${player.name} - (${player.marker}), enter a column (0-2):`
+            `${getActivePlayer().name} - (${
+                getActivePlayer().marker
+            }), enter a row (0-2):`
         );
 
-        gameboard.chooseSquare(player.marker, chosenRow, chosenColumn);
+        const chosenColumn = prompt(
+            `${getActivePlayer().name} - (${
+                getActivePlayer().marker
+            }), enter a column (0-2):`
+        );
+
+        gameboard.chooseSquare(
+            getActivePlayer().marker,
+            chosenRow,
+            chosenColumn
+        );
+
         gameboard.displayBoard();
+        switchTurn();
     };
 
     // Displaying initial board
     gameboard.displayBoard();
 
-    takeTurn(p1);
-    takeTurn(p2);
+    takeTurn();
+    takeTurn();
+    takeTurn();
+    takeTurn();
 })();
 
 // console.log empty board
