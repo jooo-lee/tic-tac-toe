@@ -3,6 +3,7 @@ const gameboard = (() => {
     const board = [];
     const rows = 3;
     const columns = 3;
+    let moveCount = 0;
 
     // Initialize board array
     for (let i = 0; i < rows; i++) {
@@ -21,9 +22,64 @@ const gameboard = (() => {
 
     const chooseSquare = (marker, row, column) => {
         board[row][column] = marker;
+        moveCount++;
     };
 
-    return { displayBoard, chooseSquare };
+    // Check for a win or a tie
+    const isGameOver = () => {
+        // Check for horizontal 3-in-a-rows
+        for (let i = 0; i < rows; i++) {
+            // Make sure the matching markers aren't empty markers
+            if (board[i][0] == "_") continue;
+
+            if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+                console.log(`horizontal winner: ${board[i][0]} in row ${i}`);
+                return true;
+            }
+        }
+
+        // Check for vertical 3-in-a-rows
+        for (let j = 0; j < columns; j++) {
+            // Make sure the matching markers aren't empty markers
+            if (board[0][j] == "_") continue;
+
+            if (board[0][j] == board[1][j] && board[1][j] == board[2][j]) {
+                console.log(`vertical winner: ${board[j][0]} in column ${j}`);
+                return true;
+            }
+        }
+
+        // Check for diagonal 3-in-a-row
+        if (
+            board[0][0] == board[1][1] &&
+            board[1][1] == board[2][2] &&
+            board[0][0] != "_"
+        ) {
+            console.log(`diagonal winner: ${board[0][0]}`);
+            return true;
+        }
+
+        // Check for anti-diagonal 3-in-a-row
+        if (
+            board[0][2] == board[1][1] &&
+            board[1][1] == board[2][0] &&
+            board[0][2] != "_"
+        ) {
+            console.log(`anti-diagonal winner: ${board[0][2]}`);
+            return true;
+        }
+
+        // Check for tie
+        if (moveCount == 9) {
+            console.log("tie");
+            return true;
+        }
+
+        // Game not over
+        return false;
+    };
+
+    return { displayBoard, chooseSquare, isGameOver };
 })();
 
 function createPlayer(name, marker) {
@@ -71,20 +127,8 @@ const gameController = (() => {
     // Displaying initial board
     gameboard.displayBoard();
 
-    takeTurn();
-    takeTurn();
-    takeTurn();
-    takeTurn();
+    // Keep playing until there is a win or a tie
+    while (!gameboard.isGameOver()) {
+        takeTurn();
+    }
 })();
-
-// console.log empty board
-// it will be p1's turn
-// allow p1 to choose their square
-// put p1's marker in said square
-// switch turns
-// allow p2 to choose their square
-// put p2's marker in said square
-// switch turns
-// etc...
-// until either there are no more empty squares available
-// or either p1 or p2 has 3 markers in a row
