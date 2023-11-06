@@ -26,7 +26,7 @@ const gameboard = (() => {
     };
 
     // Check for a win or a tie
-    const isGameOver = () => {
+    const checkGameOver = () => {
         // Check for horizontal 3-in-a-rows
         for (let i = 0; i < rows; i++) {
             // Make sure the matching markers aren't empty markers
@@ -79,7 +79,7 @@ const gameboard = (() => {
         return false;
     };
 
-    return { displayBoard, chooseSquare, isGameOver };
+    return { displayBoard, chooseSquare, checkGameOver };
 })();
 
 function createPlayer(name, marker) {
@@ -128,7 +128,7 @@ const gameController = (() => {
     gameboard.displayBoard();
 
     // Keep playing until there is a win or a tie
-    while (!gameboard.isGameOver()) {
+    while (!gameboard.checkGameOver()) {
         takeTurn();
     }
 })();
