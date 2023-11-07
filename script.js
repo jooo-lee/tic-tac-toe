@@ -4,6 +4,7 @@ const gameboard = (() => {
     const rows = 3;
     const columns = 3;
     let moveCount = 0;
+    let isGameOver = false;
 
     // Initialize board array
     for (let i = 0; i < rows; i++) {
@@ -46,63 +47,72 @@ const gameboard = (() => {
     const chooseSquare = (marker, row, column) => {
         board[row][column] = marker;
         moveCount++;
+        checkGameOver(row, column);
     };
 
     // Check for a win or a tie
-    const checkGameOver = () => {
-        // Check for horizontal 3-in-a-rows
-        for (let i = 0; i < rows; i++) {
-            // Make sure the matching markers aren't empty markers
-            if (board[i][0] == "_") continue;
-
-            if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
-                console.log(`horizontal winner: ${board[i][0]} in row ${i}`);
-                return true;
-            }
+    const checkGameOver = (row, column) => {
+        // Check for horizontal 3-in-a-row
+        if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
+            console.log(`horizontal winner: ${board[row][0]} in row ${row}`);
+            isGameOver = true;
+            return;
         }
 
-        // Check for vertical 3-in-a-rows
-        for (let j = 0; j < columns; j++) {
-            // Make sure the matching markers aren't empty markers
-            if (board[0][j] == "_") continue;
-
-            if (board[0][j] == board[1][j] && board[1][j] == board[2][j]) {
-                console.log(`vertical winner: ${board[j][0]} in column ${j}`);
-                return true;
-            }
+        // Check for vertical 3-in-a-row
+        if (
+            board[0][column] == board[1][column] &&
+            board[1][column] == board[2][column]
+        ) {
+            console.log(
+                `vertical winner: ${board[0][column]} in column ${column}`
+            );
+            isGameOver = true;
+            return;
         }
 
         // Check for diagonal 3-in-a-row
         if (
+            row == column &&
             board[0][0] == board[1][1] &&
-            board[1][1] == board[2][2] &&
-            board[0][0] != "_"
+            board[1][1] == board[2][2]
         ) {
             console.log(`diagonal winner: ${board[0][0]}`);
-            return true;
+            isGameOver = true;
+            return;
         }
 
         // Check for anti-diagonal 3-in-a-row
         if (
+            board[1][1] != "_" &&
             board[0][2] == board[1][1] &&
-            board[1][1] == board[2][0] &&
-            board[0][2] != "_"
+            board[1][1] == board[2][0]
         ) {
             console.log(`anti-diagonal winner: ${board[0][2]}`);
-            return true;
+            isGameOver = true;
+            return;
         }
 
         // Check for tie
         if (moveCount == 9) {
             console.log("tie");
-            return true;
+            isGameOver = true;
+            return;
         }
 
-        // Game not over
-        return false;
+        // Display gameboard if game over
+        if (isGameOver) displayBoard();
     };
 
-    return { displayBoard, checkValidSquare, chooseSquare, checkGameOver };
+    const getGameOver = () => isGameOver;
+
+    return {
+        displayBoard,
+        checkValidSquare,
+        chooseSquare,
+        checkGameOver,
+        getGameOver,
+    };
 })();
 
 function createPlayer(name, marker) {
@@ -156,7 +166,7 @@ const gameController = (() => {
     gameboard.displayBoard();
 
     // Keep playing until there is a win or a tie
-    while (!gameboard.checkGameOver()) {
+    while (!gameboard.getGameOver()) {
         takeTurn();
     }
 })();
