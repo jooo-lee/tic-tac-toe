@@ -47,7 +47,6 @@ const gameboard = (() => {
     const chooseSquare = (marker, row, column) => {
         board[row][column] = marker;
         moveCount++;
-        checkGameOver(row, column);
     };
 
     // Check for a win or a tie
@@ -119,6 +118,19 @@ function createPlayer(name, marker) {
     return { name, marker };
 }
 
+// For handling display/DOM logic
+const displayController = (() => {
+    // Update DOM gameboard with marker in appropriate square
+    const updateBoard = (marker, row, column) => {
+        const chosenSquare = document.querySelector(
+            `.square[data-row="${row}"][data-column="${column}"]`
+        );
+        chosenSquare.textContent = marker;
+    };
+
+    return { updateBoard };
+})();
+
 // For controlling the flow of the game
 const gameController = (() => {
     const p1 = createPlayer("playerOne", "X");
@@ -157,6 +169,14 @@ const gameController = (() => {
             chosenRow,
             chosenColumn
         );
+
+        displayController.updateBoard(
+            getActivePlayer().marker,
+            chosenRow,
+            chosenColumn
+        );
+
+        gameboard.checkGameOver(chosenRow, chosenColumn);
 
         gameboard.displayBoard();
         switchTurn();

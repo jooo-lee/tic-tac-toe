@@ -24,8 +24,9 @@ body {
     gap: 8px;
 }
 
-.grid-cell {
+.square {
     background-color: white;
     padding: 16px;
     display: flex;
+    justify-content: center;
 }
