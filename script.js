@@ -123,11 +123,27 @@ const gameController = (() => {
         switchTurn();
     };
 
-    return { takeTurn };
+    return { takeTurn, getActivePlayer };
 })();
 
 // For handling display/DOM logic
 const displayController = (() => {
+    // Announce player turn, win or tie
+    const announce = (playerName, isGameOver) => {
+        const announcementDiv = document.querySelector("#announcement");
+        announcementDiv.replaceChildren(); // Clear existing children nodes
+
+        // If game is in progress, announce whose turn it is
+        // If game is over, announce that
+        const p = document.createElement("p");
+        p.textContent = isGameOver
+            ? `GAME OVER`
+            : `It is ${playerName}'s turn!`;
+        announcementDiv.appendChild(p);
+    };
+
+    announce(gameController.getActivePlayer().name, false);
+
     // Allow users to click to select square
     const squares = document.querySelectorAll(".square");
     squares.forEach((square) => {
@@ -142,6 +158,10 @@ const displayController = (() => {
 
             gameController.takeTurn(row, column);
             updateBoard(row, column);
+            announce(
+                gameController.getActivePlayer().name,
+                gameboard.getGameOver()
+            );
         });
     });
 

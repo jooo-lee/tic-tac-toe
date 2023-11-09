@@ -1,7 +1,6 @@
 :root {
-    --marker-color: #dcf763;
-    --grid-color: #dcf763;
-    --background-color: #435058;
+    --main-color: #435058;
+    --secondary-color: #dcf763;
 }
 
 * {
@@ -16,17 +15,25 @@ body {
 }
 
 #main-content {
-    background: var(--background-color);
+    background: var(--main-color);
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 25px;
+}
+
+#announcement {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
 }
 
 #grid-container {
     height: 75vw;
     width: 75vw;
-    background-color: var(--grid-color);
+    background-color: var(--secondary-color);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -35,9 +42,9 @@ body {
 
 .square {
     border: none;
-    font-size: 4rem;
-    color: var(--marker-color);
-    background-color: var(--background-color);
+    font-size: 3.5rem;
+    color: var(--secondary-color);
+    background-color: var(--main-color);
     display: flex;
     justify-content: center;
     align-items: center;
