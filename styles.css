@@ -1,3 +1,9 @@
+:root {
+    --marker-color: #dcf763;
+    --grid-color: #dcf763;
+    --background-color: #435058;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -10,6 +16,7 @@ body {
 }
 
 #main-content {
+    background: var(--background-color);
     height: 100%;
     display: flex;
     justify-content: center;
@@ -17,17 +24,21 @@ body {
 }
 
 #grid-container {
-    background-color: black;
+    height: 75vw;
+    width: 75vw;
+    background-color: var(--grid-color);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: 8px;
 }
 
 .square {
-    font-size: 8rem;
-    background-color: white;
-    padding: 16px;
-    cursor: pointer;
+    border: none;
+    font-size: 4rem;
+    color: var(--marker-color);
+    background-color: var(--background-color);
     display: flex;
     justify-content: center;
+    align-items: center;
 }
