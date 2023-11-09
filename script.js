@@ -14,29 +14,9 @@ const gameboard = (() => {
         }
     }
 
-    // Output current board to console
-    const displayBoard = () => {
-        // Style board array for console output
-        const gameboardOutput = board.map((row) => row.join(" ")).join("\n");
-        console.log(gameboardOutput);
-    };
+    const getBoard = () => board;
 
     const checkValidSquare = (row, column) => {
-        // User has pressed cancel or submitted without value
-        if (row === null || column === null || row === "" || column === "") {
-            return false;
-        }
-
-        // Value submitted is not a number
-        if (isNaN(row) || isNaN(column)) {
-            return false;
-        }
-
-        // Row and/or column picked is out of bounds
-        if (row < 0 || row >= rows || column < 0 || column >= columns) {
-            return false;
-        }
-
         // Square has already been chosen before
         if (board[row][column] != "_") return false;
 
@@ -98,15 +78,12 @@ const gameboard = (() => {
             isGameOver = true;
             return;
         }
-
-        // Display gameboard if game over
-        if (isGameOver) displayBoard();
     };
 
     const getGameOver = () => isGameOver;
 
     return {
-        displayBoard,
+        getBoard,
         checkValidSquare,
         chooseSquare,
         checkGameOver,
@@ -114,25 +91,12 @@ const gameboard = (() => {
     };
 })();
 
-function createPlayer(name, marker) {
-    return { name, marker };
-}
-
-// For handling display/DOM logic
-const displayController = (() => {
-    // Update DOM gameboard with marker in appropriate square
-    const updateBoard = (marker, row, column) => {
-        const chosenSquare = document.querySelector(
-            `.square[data-row="${row}"][data-column="${column}"]`
-        );
-        chosenSquare.textContent = marker;
-    };
-
-    return { updateBoard };
-})();
-
 // For controlling the flow of the game
 const gameController = (() => {
+    const createPlayer = (name, marker) => {
+        return { name, marker };
+    };
+
     const p1 = createPlayer("playerOne", "X");
     const p2 = createPlayer("playerTwo", "O");
 
@@ -146,47 +110,47 @@ const gameController = (() => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
 
-    const takeTurn = () => {
-        const chosenRow = prompt(
-            `${getActivePlayer().name} - (${
-                getActivePlayer().marker
-            }), enter a row (0-2):`
-        );
+    const takeTurn = (row, column) => {
+        if (gameboard.getGameOver()) return;
 
-        const chosenColumn = prompt(
-            `${getActivePlayer().name} - (${
-                getActivePlayer().marker
-            }), enter a column (0-2):`
-        );
-
-        if (!gameboard.checkValidSquare(chosenRow, chosenColumn)) {
+        if (!gameboard.checkValidSquare(row, column)) {
             console.log(`${getActivePlayer().name}, invalid square!`);
             return;
         }
 
-        gameboard.chooseSquare(
-            getActivePlayer().marker,
-            chosenRow,
-            chosenColumn
-        );
-
-        displayController.updateBoard(
-            getActivePlayer().marker,
-            chosenRow,
-            chosenColumn
-        );
-
-        gameboard.checkGameOver(chosenRow, chosenColumn);
-
-        gameboard.displayBoard();
+        gameboard.chooseSquare(getActivePlayer().marker, row, column);
+        gameboard.checkGameOver(row, column);
         switchTurn();
     };
 
-    // Displaying initial board
-    gameboard.displayBoard();
+    return { takeTurn };
+})();
 
-    // Keep playing until there is a win or a tie
-    while (!gameboard.getGameOver()) {
-        takeTurn();
-    }
+// For handling display/DOM logic
+const displayController = (() => {
+    // Allow users to click to select square
+    const squares = document.querySelectorAll(".square");
+    squares.forEach((square) => {
+        square.addEventListener("click", (e) => {
+            // Do nothing if game is over
+            if (gameboard.getGameOver()) return;
+
+            console.log(gameboard.getBoard());
+
+            const row = parseInt(e.target.dataset.row);
+            const column = parseInt(e.target.dataset.column);
+
+            gameController.takeTurn(row, column);
+            updateBoard(row, column);
+        });
+    });
+
+    // Update DOM gameboard with marker in appropriate square
+    const updateBoard = (row, column) => {
+        const board = gameboard.getBoard();
+        const chosenSquare = document.querySelector(
+            `.square[data-row="${row}"][data-column="${column}"]`
+        );
+        chosenSquare.textContent = board[row][column];
+    };
 })();

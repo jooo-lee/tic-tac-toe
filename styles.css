@@ -17,7 +17,6 @@ body {
 }
 
 #grid-container {
-    font-size: 8rem;
     background-color: black;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -25,8 +24,10 @@ body {
 }
 
 .square {
+    font-size: 8rem;
     background-color: white;
     padding: 16px;
+    cursor: pointer;
     display: flex;
     justify-content: center;
 }
