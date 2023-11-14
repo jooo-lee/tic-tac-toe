@@ -30,7 +30,7 @@ body {
     color: var(--secondary-color);
 }
 
-/* ----------------------- Gameboard ----------------------- */
+/* ------------------------ Gameboard ------------------------ */
 
 #grid-container {
     height: 75vw;
@@ -50,9 +50,31 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
-/* ----------------------- Screens Narrower Than 300px ----------------------- */
+/* ----------------------- Restart Button ----------------------- */
+
+#restart-btn {
+    border: 2px solid var(--secondary-color);
+    border-radius: 8px;
+    background-color: var(--main-color);
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* ------------------------- Hover Effects ------------------------- */
+
+@media (hover: hover) {
+    #restart-btn:hover {
+        background-color: var(--secondary-color);
+        color: var(--main-color);
+    }
+}
+
+/* ----------------- Screens Narrower Than 300px ----------------- */
 
 @media only screen and (max-width: 300px) {
     #announcement {
@@ -62,9 +84,13 @@ body {
     .square {
         font-size: 3.5rem;
     }
+
+    #restart-btn {
+        font-size: 1.2rem;
+    }
 }
 
-/* ------------------------------ Larger Screens ------------------------------ */
+/* ----------------------- Larger Screens ----------------------- */
 
 @media only screen and (min-width: 550px) {
     #announcement {
@@ -79,6 +105,5 @@ body {
 
     .square {
         font-size: 5rem;
-        cursor: pointer;
     }
 }
