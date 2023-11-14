@@ -79,5 +79,6 @@ body {
 
     .square {
         font-size: 5rem;
+        cursor: pointer;
     }
 }
