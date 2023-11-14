@@ -82,12 +82,25 @@ const gameboard = (() => {
 
     const getGameOver = () => isGameOver;
 
+    const restart = () => {
+        // Reset board array
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < columns; j++) {
+                board[i][j] = "_";
+            }
+        }
+
+        isGameOver = false;
+        moveCount = 0;
+    };
+
     return {
         getBoard,
         checkValidSquare,
         chooseSquare,
         checkGameOver,
         getGameOver,
+        restart,
     };
 })();
 
@@ -97,8 +110,8 @@ const gameController = (() => {
         return { name, marker };
     };
 
-    const p1 = createPlayer("playerOne", "X");
-    const p2 = createPlayer("playerTwo", "O");
+    const p1 = createPlayer("player X", "X");
+    const p2 = createPlayer("player O", "O");
 
     const players = [p1, p2];
 
@@ -123,7 +136,12 @@ const gameController = (() => {
         switchTurn();
     };
 
-    return { takeTurn, getActivePlayer };
+    const restart = () => {
+        gameboard.restart();
+        activePlayer = players[0];
+    };
+
+    return { takeTurn, getActivePlayer, restart };
 })();
 
 // For handling display/DOM logic
@@ -157,7 +175,7 @@ const displayController = (() => {
             const column = parseInt(e.target.dataset.column);
 
             gameController.takeTurn(row, column);
-            updateBoard(row, column);
+            updateSquare(row, column);
             announce(
                 gameController.getActivePlayer().name,
                 gameboard.getGameOver()
@@ -166,11 +184,25 @@ const displayController = (() => {
     });
 
     // Update DOM gameboard with marker in appropriate square
-    const updateBoard = (row, column) => {
+    const updateSquare = (row, column) => {
         const board = gameboard.getBoard();
         const chosenSquare = document.querySelector(
             `.square[data-row="${row}"][data-column="${column}"]`
         );
         chosenSquare.textContent = board[row][column];
     };
+
+    const clearDOMBoard = () => {
+        const squares = document.querySelectorAll(".square");
+        squares.forEach((square) => {
+            square.textContent = "";
+        });
+    };
+
+    const restartBtn = document.querySelector("#restart-btn");
+    restartBtn.addEventListener("click", () => {
+        gameController.restart();
+        clearDOMBoard();
+        announce(gameController.getActivePlayer().name, false);
+    });
 })();
