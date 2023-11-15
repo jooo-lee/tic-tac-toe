@@ -5,6 +5,8 @@ const gameboard = (() => {
     const columns = 3;
     let moveCount = 0;
     let isGameOver = false;
+    let isTie = false;
+    let winningMarker = "";
 
     // Initialize board array
     for (let i = 0; i < rows; i++) {
@@ -35,6 +37,7 @@ const gameboard = (() => {
         if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
             console.log(`horizontal winner: ${board[row][0]} in row ${row}`);
             isGameOver = true;
+            winningMarker = `${board[row][0]}`;
             return;
         }
 
@@ -47,6 +50,7 @@ const gameboard = (() => {
                 `vertical winner: ${board[0][column]} in column ${column}`
             );
             isGameOver = true;
+            winningMarker = `${board[0][column]}`;
             return;
         }
 
@@ -58,6 +62,7 @@ const gameboard = (() => {
         ) {
             console.log(`diagonal winner: ${board[0][0]}`);
             isGameOver = true;
+            winningMarker = `${board[0][0]}`;
             return;
         }
 
@@ -69,6 +74,7 @@ const gameboard = (() => {
         ) {
             console.log(`anti-diagonal winner: ${board[0][2]}`);
             isGameOver = true;
+            winningMarker = `${board[0][2]}`;
             return;
         }
 
@@ -76,11 +82,16 @@ const gameboard = (() => {
         if (moveCount == 9) {
             console.log("tie");
             isGameOver = true;
+            isTie = true;
             return;
         }
     };
 
-    const getGameOver = () => isGameOver;
+    const getIsGameOver = () => isGameOver;
+
+    const getIsTie = () => isTie;
+
+    const getWinningMarker = () => winningMarker;
 
     const restart = () => {
         // Reset board array
@@ -91,6 +102,8 @@ const gameboard = (() => {
         }
 
         isGameOver = false;
+        isTie = false;
+        winningMarker = "";
         moveCount = 0;
     };
 
@@ -99,7 +112,9 @@ const gameboard = (() => {
         checkValidSquare,
         chooseSquare,
         checkGameOver,
-        getGameOver,
+        getIsGameOver,
+        getIsTie,
+        getWinningMarker,
         restart,
     };
 })();
@@ -110,38 +125,56 @@ const gameController = (() => {
         return { name, marker };
     };
 
-    const p1 = createPlayer("player X", "X");
-    const p2 = createPlayer("player O", "O");
+    const p1 = createPlayer("Player X", "X");
+    const p2 = createPlayer("Player O", "O");
 
     const players = [p1, p2];
 
     let activePlayer = players[0];
 
-    const getActivePlayer = () => activePlayer;
+    const getActivePlayerName = () => activePlayer.name;
+    const getActivePlayerMarker = () => activePlayer.marker;
+
+    let winningPlayerName = "";
 
     const switchTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
 
     const takeTurn = (row, column) => {
-        if (gameboard.getGameOver()) return;
-
+        // Do not allow player to choose invalid square and do not switch turns
         if (!gameboard.checkValidSquare(row, column)) {
-            console.log(`${getActivePlayer().name}, invalid square!`);
+            console.log(`${getActivePlayerName()}, invalid square!`);
             return;
         }
 
-        gameboard.chooseSquare(getActivePlayer().marker, row, column);
+        // Valid square chosen
+        gameboard.chooseSquare(getActivePlayerMarker(), row, column);
         gameboard.checkGameOver(row, column);
+
+        // Update winning marker if player has won
+        if (gameboard.getIsGameOver()) {
+            if (gameboard.getWinningMarker()) {
+                // Get name of player whose marker matches the winning marker
+                winningPlayerName = players.find(
+                    (player) => player.marker === gameboard.getWinningMarker()
+                ).name;
+            }
+            return;
+        }
+
         switchTurn();
     };
+
+    const getWinningPlayerName = () => winningPlayerName;
 
     const restart = () => {
         gameboard.restart();
         activePlayer = players[0];
+        winningPlayerName = "";
     };
 
-    return { takeTurn, getActivePlayer, restart };
+    return { takeTurn, getActivePlayerName, getWinningPlayerName, restart };
 })();
 
 // For handling display/DOM logic
@@ -151,23 +184,28 @@ const displayController = (() => {
         const announcementDiv = document.querySelector("#announcement");
         announcementDiv.replaceChildren(); // Clear existing children nodes
 
-        // If game is in progress, announce whose turn it is
-        // If game is over, announce that
+        // If game in progress, announce whose turn it is
+        // If game over, announce tie or winner
         const p = document.createElement("p");
-        p.textContent = isGameOver
-            ? `GAME OVER`
-            : `It is ${playerName}'s turn!`;
+        if (isGameOver && gameboard.getIsTie()) {
+            p.textContent = "It's a tie!";
+        } else if (isGameOver) {
+            p.textContent = `The winner is: ${gameController.getWinningPlayerName()}!`;
+        } else {
+            p.textContent = `${playerName}, your turn!`;
+        }
         announcementDiv.appendChild(p);
     };
 
-    announce(gameController.getActivePlayer().name, false);
+    // Initial announcement
+    announce(gameController.getActivePlayerName(), false);
 
     // Allow users to click to select square
     const squares = document.querySelectorAll(".square");
     squares.forEach((square) => {
         square.addEventListener("click", (e) => {
-            // Do nothing if game is over
-            if (gameboard.getGameOver()) return;
+            // Do not allow gameboard to be changed if game is over
+            if (gameboard.getIsGameOver()) return;
 
             console.log(gameboard.getBoard());
 
@@ -177,8 +215,8 @@ const displayController = (() => {
             gameController.takeTurn(row, column);
             updateSquare(row, column);
             announce(
-                gameController.getActivePlayer().name,
-                gameboard.getGameOver()
+                gameController.getActivePlayerName(),
+                gameboard.getIsGameOver()
             );
         });
     });
@@ -203,6 +241,6 @@ const displayController = (() => {
     restartBtn.addEventListener("click", () => {
         gameController.restart();
         clearDOMBoard();
-        announce(gameController.getActivePlayer().name, false);
+        announce(gameController.getActivePlayerName(), false);
     });
 })();
