@@ -85,6 +85,10 @@ main {
         background-color: var(--secondary-color);
         color: var(--main-color);
     }
+
+    #github-link:hover {
+        transform: scale(1.2);
+    }
 }
 
 /* ----------------- Screens Narrower Than 350px ----------------- */
@@ -123,4 +127,26 @@ main {
     .square {
         font-size: 5rem;
     }
+}
+
+/* ------------------------------- Footer ------------------------------- */
+
+footer {
+    color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    margin-top: auto; /* Make footer stay at bottom of page */
+    margin-bottom: 1rem;
+}
+
+footer a {
+    display: flex;
+    align-items: center;
+}
+
+#github-icon {
+    height: 1.5rem;
 }
