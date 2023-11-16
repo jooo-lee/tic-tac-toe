@@ -14,9 +14,23 @@ body {
     height: 100%;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-color);
+    color: var(--secondary-color);
+}
+
+h1 {
+    font-size: 4rem;
+    text-decoration: underline;
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
 main {
-    background: var(--main-color);
-    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -27,7 +41,6 @@ main {
 #announcement {
     text-align: center;
     font-size: 2rem;
-    color: var(--secondary-color);
 }
 
 /* ------------------------ Gameboard ------------------------ */
@@ -74,9 +87,13 @@ main {
     }
 }
 
-/* ----------------- Screens Narrower Than 300px ----------------- */
+/* ----------------- Screens Narrower Than 350px ----------------- */
 
-@media only screen and (max-width: 300px) {
+@media only screen and (max-width: 350px) {
+    h1 {
+        font-size: 3rem;
+    }
+
     #announcement {
         font-size: 1.5rem;
     }
@@ -92,7 +109,7 @@ main {
 
 /* ----------------------- Larger Screens ----------------------- */
 
-@media only screen and (min-width: 550px) {
+@media only screen and (min-width: 500px) {
     #announcement {
         font-size: 2.5rem;
     }
