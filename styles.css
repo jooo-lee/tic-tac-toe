@@ -83,6 +83,8 @@ main {
 @media (hover: hover) {
     .square:hover {
         background-color: var(--secondary-color);
+        color: var(--main-color);
+        opacity: 0.85;
         filter: brightness(0.7);
     }
 
