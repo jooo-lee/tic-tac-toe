@@ -12,7 +12,7 @@ const gameboard = (() => {
     for (let i = 0; i < rows; i++) {
         board.push([]);
         for (let j = 0; j < columns; j++) {
-            board[i].push("_");
+            board[i].push("");
         }
     }
 
@@ -20,7 +20,7 @@ const gameboard = (() => {
 
     const checkValidSquare = (row, column) => {
         // Square has already been chosen before
-        if (board[row][column] != "_") return false;
+        if (board[row][column] != "") return false;
 
         // Square is valid
         return true;
@@ -63,7 +63,7 @@ const gameboard = (() => {
 
         // Check for anti-diagonal 3-in-a-row
         if (
-            board[1][1] != "_" &&
+            board[1][1] != "" &&
             board[0][2] == board[1][1] &&
             board[1][1] == board[2][0]
         ) {
@@ -90,7 +90,7 @@ const gameboard = (() => {
         // Reset board array
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < columns; j++) {
-                board[i][j] = "_";
+                board[i][j] = "";
             }
         }
 
