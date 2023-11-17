@@ -25,11 +25,11 @@ body {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 3rem;
     text-decoration: underline;
     display: flex;
     justify-content: center;
-    margin-top: 3rem;
+    margin-top: 2rem;
 }
 
 main {
@@ -81,6 +81,28 @@ main {
     cursor: pointer;
 }
 
+/* ------------------------------- Footer ------------------------------- */
+
+footer {
+    color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    margin-top: auto; /* Make footer stay at bottom of page */
+    margin-bottom: 1rem;
+}
+
+footer a {
+    display: flex;
+    align-items: center;
+}
+
+#github-icon {
+    height: 1.5rem;
+}
+
 /* ------------------------- Hover Effects ------------------------- */
 
 @media (hover: hover) {
@@ -105,7 +127,7 @@ main {
 
 @media only screen and (max-width: 350px) {
     h1 {
-        font-size: 3rem;
+        font-size: 2rem;
     }
 
     #announcement {
@@ -124,8 +146,16 @@ main {
 /* ----------------------- Larger Screens ----------------------- */
 
 @media only screen and (min-width: 500px) {
+    h1 {
+        font-size: 4rem;
+    }
+
+    main {
+        margin: 16px 0;
+    }
+
     #announcement {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
     #grid-container {
@@ -137,26 +167,4 @@ main {
     .square {
         font-size: 5rem;
     }
-}
-
-/* ------------------------------- Footer ------------------------------- */
-
-footer {
-    color: var(--secondary-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    font-size: 1rem;
-    margin-top: auto; /* Make footer stay at bottom of page */
-    margin-bottom: 1rem;
-}
-
-footer a {
-    display: flex;
-    align-items: center;
-}
-
-#github-icon {
-    height: 1.5rem;
 }
