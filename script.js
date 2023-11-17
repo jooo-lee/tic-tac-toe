@@ -35,7 +35,6 @@ const gameboard = (() => {
     const checkGameOver = (row, column) => {
         // Check for horizontal 3-in-a-row
         if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
-            console.log(`horizontal winner: ${board[row][0]} in row ${row}`);
             isGameOver = true;
             winningMarker = `${board[row][0]}`;
             return;
@@ -46,9 +45,6 @@ const gameboard = (() => {
             board[0][column] == board[1][column] &&
             board[1][column] == board[2][column]
         ) {
-            console.log(
-                `vertical winner: ${board[0][column]} in column ${column}`
-            );
             isGameOver = true;
             winningMarker = `${board[0][column]}`;
             return;
@@ -60,7 +56,6 @@ const gameboard = (() => {
             board[0][0] == board[1][1] &&
             board[1][1] == board[2][2]
         ) {
-            console.log(`diagonal winner: ${board[0][0]}`);
             isGameOver = true;
             winningMarker = `${board[0][0]}`;
             return;
@@ -72,7 +67,6 @@ const gameboard = (() => {
             board[0][2] == board[1][1] &&
             board[1][1] == board[2][0]
         ) {
-            console.log(`anti-diagonal winner: ${board[0][2]}`);
             isGameOver = true;
             winningMarker = `${board[0][2]}`;
             return;
@@ -80,7 +74,6 @@ const gameboard = (() => {
 
         // Check for tie
         if (moveCount == 9) {
-            console.log("tie");
             isGameOver = true;
             isTie = true;
             return;
@@ -143,10 +136,7 @@ const gameController = (() => {
 
     const takeTurn = (row, column) => {
         // Do not allow player to choose invalid square and do not switch turns
-        if (!gameboard.checkValidSquare(row, column)) {
-            console.log(`${getActivePlayerName()}, invalid square!`);
-            return;
-        }
+        if (!gameboard.checkValidSquare(row, column)) return;
 
         // Valid square chosen
         gameboard.chooseSquare(getActivePlayerMarker(), row, column);
@@ -206,8 +196,6 @@ const displayController = (() => {
         square.addEventListener("click", (e) => {
             // Do not allow gameboard to be changed if game is over
             if (gameboard.getIsGameOver()) return;
-
-            console.log(gameboard.getBoard());
 
             const row = parseInt(e.target.dataset.row);
             const column = parseInt(e.target.dataset.column);
