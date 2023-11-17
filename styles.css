@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+
 :root {
     --main-color: #435058;
     --secondary-color: #dcf763;
@@ -7,6 +9,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: "Raleway", system-ui, Helvetica, Arial, sans-serif;
 }
 
 html,
