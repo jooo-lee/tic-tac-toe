@@ -81,6 +81,11 @@ main {
 /* ------------------------- Hover Effects ------------------------- */
 
 @media (hover: hover) {
+    .square:hover {
+        background-color: var(--secondary-color);
+        filter: brightness(0.7);
+    }
+
     #restart-btn:hover {
         background-color: var(--secondary-color);
         color: var(--main-color);
