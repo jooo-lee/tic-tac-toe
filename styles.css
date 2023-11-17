@@ -29,7 +29,8 @@ h1 {
     text-decoration: underline;
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: 32px;
+    text-align: center;
 }
 
 main {
@@ -49,8 +50,8 @@ main {
 /* ------------------------ Gameboard ------------------------ */
 
 #grid-container {
-    height: 75vw;
-    width: 75vw;
+    height: 300px;
+    width: 300px;
     background-color: var(--secondary-color);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -60,7 +61,7 @@ main {
 
 .square {
     border: none;
-    font-size: 4rem;
+    font-size: 3rem;
     color: var(--secondary-color);
     background-color: var(--main-color);
     display: flex;
@@ -92,6 +93,10 @@ footer {
     font-size: 1rem;
     margin-top: auto; /* Make footer stay at bottom of page */
     margin-bottom: 1rem;
+}
+
+footer p {
+    text-align: center;
 }
 
 footer a {
@@ -134,8 +139,9 @@ footer a {
         font-size: 1.5rem;
     }
 
-    .square {
-        font-size: 3.5rem;
+    #grid-container {
+        height: 225px;
+        width: 225px;
     }
 
     #restart-btn {
@@ -152,19 +158,5 @@ footer a {
 
     main {
         margin: 16px 0;
-    }
-
-    #announcement {
-        font-size: 2rem;
-    }
-
-    #grid-container {
-        height: 50vh;
-        width: 50vh;
-        gap: 12px;
-    }
-
-    .square {
-        font-size: 5rem;
     }
 }
